@@ -54,7 +54,13 @@ const SignIn = () => {
     }
   };
  
-  if (isLoading) return <ActivityIndicator size="large" color="#0000ff" />;
+  if (isLoading) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </SafeAreaView>
+    );
+  }
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
