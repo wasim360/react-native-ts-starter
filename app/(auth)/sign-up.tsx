@@ -5,10 +5,13 @@ import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
 import { Link, router } from 'expo-router'
 import { images } from '@/constants'
-import { createUser } from '@/lib/appwrite'
+import { useMutation } from 'react-query'
+import { createUser } from '@/api/user'
+
 
 const SignUp = () => {
   const [isSubmitting, setSubmitting] = useState(false);
+  const {mutate:mutateCreate , isLoading}=useMutation(createUser)
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -23,17 +26,14 @@ const SignUp = () => {
     setSubmitting(true);
     console.log('user is creating...')
     try {
-      const result = await createUser(form.email, form.password, form.username);
-      // setUser(result);
-      // setIsLogged(true);
-      console.log(result, "my result")
+ 
 
-      router.push("/home");
+      router.push("/home" as any);
     } catch (error:any) {
       Alert.alert("Error", error.message);
     } finally {
       setSubmitting(false);
-      router.push("/home");
+      router.push("/home" as any);
     }
   };
   return (
@@ -80,7 +80,7 @@ const SignUp = () => {
               Have an account already?
             </Text>
             <Link
-              href='sign-in'
+              href={'sign-in' as any}
               className="text-lg font-psemibold text-secondary"
             >
               Sigin

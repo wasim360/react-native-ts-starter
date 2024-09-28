@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/lib/appwrite';
+
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 
 
@@ -27,24 +27,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    getCurrentUser()
-      .then((res:any) => {
-        if (res) {
-          setIsLogged(true);
-          setUser(res);
-        } else {
-          setIsLogged(false);
-          setUser(null);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+
   const contextValue: AuthContextType = {
     isLogged,
     user,

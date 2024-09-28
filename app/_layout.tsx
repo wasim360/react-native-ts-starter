@@ -1,14 +1,21 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Slot, Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import { Slot, Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+import "react-native-reanimated";
+import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { Text } from 'react-native';
-import { GlobalProvider } from '@/context/GlobalProvider';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { Text } from "react-native";
+import { GlobalProvider } from "@/context/GlobalProvider";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
+import { store } from "@/store/store";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -41,25 +48,28 @@ export default function RootLayout() {
   if (!fontsLoaded && !error) {
     return null;
   }
-
-
-
+ 
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 2,
+        refetchOnWindowFocus: false,
+        staleTime: 1000 * 60 * 5, 
+      },
+    },
+  });
 
   return (
-    <GlobalProvider>
-     
-      <Stack>
-    <Stack.Screen name='index' options={{headerShown:false}}/>
-    <Stack.Screen name='(auth)' options={{headerShown:false}}/>
+  <QueryClientProvider client={queryClient}>
 
-   </Stack>
-    
-
-   
-  
-   </GlobalProvider>
-   
-  )
-  
-
+    <Provider store={store}>
+      <GlobalProvider>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        </Stack>
+      </GlobalProvider>
+    </Provider>
+    </QueryClientProvider>
+  );
 }
